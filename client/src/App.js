@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import * as api from "./api/Api";
+import { Main, NavBar } from "./export";
+import { useDispatch } from "react-redux";
+import { displayData } from "./reducers/DataControl";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import styled from "styled-components";
+
+const Article = styled.article`
+font-family: "Roboto", sans-serif;
+padding: 10em 10em 10em;
+display:flex;
+justify-content:space-between;
+`
+
+
+
+const App = () =>{
+    const dispatch = useDispatch()
+    useEffect(() =>{
+        const Reducer = async () =>{
+            try {
+                const { data } = await api.LoadItems();
+                dispatch(displayData(data));
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        Reducer();
+    }, [dispatch]);
+    
+
+    return (
+        <Article>   
+            <Main />
+            <NavBar/>
+        </Article>
+    )
 }
-
 export default App;
+
