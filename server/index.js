@@ -4,11 +4,12 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 const Secret = require("./Secret");
+const postRoutes = require ('./routes/Index');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-
+app.use('/', postRoutes);
 const CONNECTION_URL = Secret() ;
 const PORT = process.env.PORT|| 5000;
 
