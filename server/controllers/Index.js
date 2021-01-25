@@ -1,11 +1,9 @@
 const Post = require("../models/Post");
 
-
-
 exports.PostList = async (req, res) =>{
     try {
         const postMessages = await Post.find();
-        res.status(200).json(postMessages);
+        res.status(201).json(postMessages);
     } catch (error) {
         res.status(404).json({
             statusCode: 404,
@@ -28,11 +26,13 @@ exports.PostDetail = async (req, res) =>{
     }
 };
 
+
 exports.PostCreate = async (req, res) => { 
 
     let PostCreate = new Post({
         title: req.body.title,
         description: req.body.description,
+        img :req.body.img
     });
     try {
         await PostCreate.save();
@@ -50,9 +50,11 @@ exports.PostUpdate = async (req,res) => {
         const { id } = req.params;
         const { title, description,img } = req.body;
         const updatedPost = { title, description, _id: id ,img:img};
+        
         await Post.findByIdAndUpdate(id, updatedPost);
         res.status(201).json(updatedPost);
     } catch (err) {
+        
         res.status(404).json({
             statusCode: 404,
             message: "something went wrong"
@@ -61,9 +63,8 @@ exports.PostUpdate = async (req,res) => {
 }
 
 
-exports.PostDelete = async(req, res, next) =>{ 
-    const { id } = rq.params;
-    await Post.findByIdAndDelete(id);
+exports.PostDelete = async (req, res) =>{
+    const { id } = req.params;
+    await Post.findByIdAndRemove(id);
     res.json({ message: "Post deleted successfully." });
-};
-
+}
